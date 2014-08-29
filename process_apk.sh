@@ -44,7 +44,7 @@ then
 		
 	
 		#Make the appropriate directories
-		mkdir -p $cwd/analyzed_apks2/"$clientname"/"$filename"
+		mkdir -p $cwd/analyzed_apks/"$clientname"/"$filename"
 
 		echo Calculating hashes for: "$filename"
 		
@@ -65,41 +65,41 @@ then
 		
 		#Unzip apk
 		echo Unzip "$filename".apk
-		unzip -u $cwd/place_apks_here/$filename.apk -d $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-unzipped
+		unzip -u $cwd/place_apks_here/$filename.apk -d $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-unzipped
 	
 		#Use apktool to get the smali files
 
 		echo Extract smali files from "$filename"
 		apktool d -m $cwd/place_apks_here/"$filename".apk
-		mv $cwd/"$filename"/ $cwd/analyzed_apks2/"$clientname"/"$filename"/
-		mv $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename" $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-smali
+		mv $cwd/"$filename"/ $cwd/analyzed_apks/"$clientname"/"$filename"/
+		mv $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename" $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-smali
 		
 			
 		#Convert classes.dex to jar file with java bytecode, then convert to java source code
 
 		echo Convert classes.dex to jar file
-		$cwd/dex2jar-0.0.9.15/d2j-dex2jar.sh $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-unzipped/classes.dex
+		$cwd/dex2jar-0.0.9.15/d2j-dex2jar.sh $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-unzipped/classes.dex
 
 		read
 		
 		echo Extract the source from the classes
-		java -jar $cwd/jd-core-java/build/libs/jd-core-java-1.2.jar $cwd/classes-dex2jar.jar $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-source
-		#java -jar $cwd/procyon-decompiler.jar -jar $cwd/classes-dex2jar.jar -o $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-source
+		java -jar $cwd/jd-core-java/build/libs/jd-core-java-1.2.jar $cwd/classes-dex2jar.jar $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-source
+		#java -jar $cwd/procyon-decompiler.jar -jar $cwd/classes-dex2jar.jar -o $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-source
 		#rm $cwd/classes-dex2jar.jar
 		read
 
 		# Run the deobfuscation commands with dex2jar
 		# echo Convert classes.dex to jar file
-		# $cwd/dex2jar-0.0.9.15/d2j-dex2jar.sh $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-unzipped/classes.dex
+		# $cwd/dex2jar-0.0.9.15/d2j-dex2jar.sh $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-unzipped/classes.dex
 		
 		$cwd/dex2jar-0.0.9.15/d2j-init-deobf.sh -f -o init.txt classes-dex2jar.jar
 		$cwd/dex2jar-0.0.9.15/d2j-jar-remap.sh -f -c init.txt -o classes-dex2jar-deobf.jar classes-dex2jar.jar
 	
 
-		mkdir -p $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-deobfuscation_conversion_file
-		mv init.txt $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-deobfuscation_conversion_file
-		#java -jar $cwd/jd-core-java/build/libs/jd-core-java-1.2.jar $cwd/classes-dex2jar-deobf.jar $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-deobf-source
-		java -jar $cwd/procyon-decompiler.jar -jar $cwd/classes-dex2jar-deobf.jar -o $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-deobf-source
+		mkdir -p $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-deobfuscation_conversion_file
+		mv init.txt $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-deobfuscation_conversion_file
+		#java -jar $cwd/jd-core-java/build/libs/jd-core-java-1.2.jar $cwd/classes-dex2jar-deobf.jar $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-deobf-source
+		java -jar $cwd/procyon-decompiler.jar -jar $cwd/classes-dex2jar-deobf.jar -o $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-deobf-source
 		rm $cwd/classes-dex2jar.jar	
 		rm $cwd/classes-dex2jar-deobf.jar
 
@@ -108,15 +108,15 @@ then
 		if [ $clientname == "LINE" ]
 		then
 			
-			mkdir -p $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-npush_classes
-			unzip $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-unzipped/assets/npush_classes.zip -d $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-npush_classes
+			mkdir -p $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-npush_classes
+			unzip $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-unzipped/assets/npush_classes.zip -d $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-npush_classes
 			
 			echo Convert classes.dex to jar file
-			/home/jt/process_apk/dex2jar-0.0.9.15/d2j-dex2jar.sh $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-npush_classes/classes.dex
-			mv $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-unzipped/assets/classes-dex2jar.jar /home/jt/process_apk/
+			/home/jt/process_apk/dex2jar-0.0.9.15/d2j-dex2jar.sh $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-npush_classes/classes.dex
+			mv $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-unzipped/assets/classes-dex2jar.jar /home/jt/process_apk/
 
 
-			java -jar $cwd/jd-core-java/build/libs/jd-core-java-1.2.jar $cwd/classes-dex2jar.jar $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-npush_classes
+			java -jar $cwd/jd-core-java/build/libs/jd-core-java-1.2.jar $cwd/classes-dex2jar.jar $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-npush_classes
 			rm $cwd/classes-dex2jar.jar
 
 		fi
@@ -124,22 +124,22 @@ then
 		if [ $clientname == "lianwo" ]
 		then
 			
-			mkdir -p $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-npush_classes
-			unzip $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-unzipped/assets/npush_classes.zip -d $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-npush_classes
+			mkdir -p $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-npush_classes
+			unzip $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-unzipped/assets/npush_classes.zip -d $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-npush_classes
 			
 			echo Convert classes.dex to jar file
-			/home/jt/process_apk/dex2jar-0.0.9.15/d2j-dex2jar.sh $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-npush_classes/classes.dex
-			mv $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-unzipped/assets/classes-dex2jar.jar /home/jt/process_apk/
+			/home/jt/process_apk/dex2jar-0.0.9.15/d2j-dex2jar.sh $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-npush_classes/classes.dex
+			mv $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-unzipped/assets/classes-dex2jar.jar /home/jt/process_apk/
 
 
-			java -jar $cwd/jd-core-java/build/libs/jd-core-java-1.2.jar $cwd/classes-dex2jar.jar $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-npush_classes
+			java -jar $cwd/jd-core-java/build/libs/jd-core-java-1.2.jar $cwd/classes-dex2jar.jar $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-npush_classes
 			rm $cwd/classes-dex2jar.jar
 
 		fi
 	
 		
 		#Start using yasca
-		if [ ! -d $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-yasca ]
+		if [ ! -d $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-yasca ]
 		then
 			
 			echo Yasca analysis for $filename
@@ -148,13 +148,13 @@ then
 			#Pickup necessary plugins
 			export SA_HOME=$cwd/yasca-core-2.21/plugins/static-tools/
 
-			./yasca $cwd/analyzed_apks2/"$clientname"/"$filename"
-			mv /home/jt/Desktop/Yasca/ $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-yasca
+			./yasca $cwd/analyzed_apks/"$clientname"/"$filename"
+			mv /home/jt/Desktop/Yasca/ $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-yasca
 			cd ..
 		fi
 		
-		mv $cwd/place_apks_here/"$filename".apk $cwd/analyzed_apks2/"$clientname"/"$filename"
-		rm -rf $cwd/analyzed_apks2/"$clientname"/"$filename"/"$filename"-unzipped
+		mv $cwd/place_apks_here/"$filename".apk $cwd/analyzed_apks/"$clientname"/"$filename"
+		rm -rf $cwd/analyzed_apks/"$clientname"/"$filename"/"$filename"-unzipped
 	
 	done
 	echo ""
